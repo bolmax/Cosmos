@@ -253,14 +253,14 @@ Shows: ★★★★☆ (123)
   
   /// Overriding the function to detect the first touch gesture.
   open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesBegan(touches, with: event) }
+    super.touchesBegan(touches, with: event)
     guard let location = touchLocationFromBeginningOfRating(touches) else { return }
     onDidTouch(location)
   }
   
   /// Overriding the function to detect touch move.
   open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesMoved(touches, with: event) }
+    super.touchesMoved(touches, with: event)
     guard let location = touchLocationFromBeginningOfRating(touches) else { return }
     onDidTouch(location)
   }
@@ -278,7 +278,8 @@ Shows: ★★★★☆ (123)
   
   /// Detecting event when the user lifts their finger.
   open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesEnded(touches, with: event) }
+    super.touchesEnded(touches, with: event)
+    
     didFinishTouchingCosmos?(rating)
   }
 
@@ -289,7 +290,8 @@ Shows: ★★★★☆ (123)
    
    */
   open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesCancelled(touches, with: event) }
+    super.touchesCancelled(touches, with: event)
+    
     didFinishTouchingCosmos?(rating)
   }
 
@@ -430,6 +432,48 @@ Shows: ★★★★☆ (123)
       settings.emptyImage = emptyImage
     }
   }
+    
+    // Custom filled images for each star
+    
+    @IBInspectable var filledImage1: UIImage? {
+        didSet {
+            if let image = filledImage1 {
+                settings.appendFilled(img: image, for: CosmosFilledImageKeys.firstStarImageKey)
+            }
+        }
+    }
+    
+    @IBInspectable var filledImage2: UIImage? {
+        didSet {
+            if let image = filledImage2 {
+                settings.appendFilled(img: image, for: CosmosFilledImageKeys.secondStarImageKey)
+            }
+        }
+    }
+    
+    @IBInspectable var filledImage3: UIImage? {
+        didSet {
+            if let image = filledImage3 {
+                settings.appendFilled(img: image, for: CosmosFilledImageKeys.thirdStarImageKey)
+            }
+        }
+    }
+    
+    @IBInspectable var filledImage4: UIImage? {
+        didSet {
+            if let image = filledImage4 {
+                settings.appendFilled(img: image, for: CosmosFilledImageKeys.fourthStarImageKey)
+            }
+        }
+    }
+    
+    @IBInspectable var filledImage5: UIImage? {
+        didSet {
+            if let image = filledImage5 {
+                settings.appendFilled(img: image, for: CosmosFilledImageKeys.fifthStarImageKey)
+            }
+        }
+    }
   
   /// Draw the stars in interface buidler
   open override func prepareForInterfaceBuilder() {

@@ -1,6 +1,18 @@
 import UIKit
 
 /**
+ Filled image keys
+ */
+
+struct CosmosFilledImageKeys {
+    static let firstStarImageKey = "firstStarImageKey"
+    static let secondStarImageKey = "secondStarImageKey"
+    static let thirdStarImageKey = "thirdStarImageKey"
+    static let fourthStarImageKey = "fourthStarImageKey"
+    static let fifthStarImageKey = "fifthStarImageKey"
+}
+
+/**
 
 Settings that define the appearance of the star rating views.
 
@@ -74,6 +86,40 @@ public struct CosmosSettings {
    
    */
   public var emptyImage: UIImage? = nil
+    
+    /**
+    
+    Dictionary with asset of filled images for start, each image for each star
+    */
+    public var filledImagesAsset = [String: UIImage]()
+    
+    /**
+     
+     Adding filled image to asset
+     */
+    mutating func appendFilled(img: UIImage, for key: String) {
+        filledImagesAsset[key] = img
+    }
+    
+    /**
+     
+     Getting filled image from asset by key
+     */
+    func filledImage(for key: String) -> UIImage? {
+        return filledImagesAsset[key] as? UIImage
+    }
+    
+    func getFilledImage(for index: Int) -> UIImage? {
+        
+        switch index {
+        case 0: return filledImage(for: CosmosFilledImageKeys.firstStarImageKey)
+        case 1: return filledImage(for: CosmosFilledImageKeys.secondStarImageKey)
+        case 2: return filledImage(for: CosmosFilledImageKeys.thirdStarImageKey)
+        case 3: return filledImage(for: CosmosFilledImageKeys.fourthStarImageKey)
+        case 4: return filledImage(for: CosmosFilledImageKeys.fifthStarImageKey)
+        default: return nil
+        }
+    }
   
   // MARK: - Text settings
   // -----------------------------
@@ -93,9 +139,6 @@ public struct CosmosSettings {
   
   /// The lowest rating that user can set by touching the stars.
   public var minTouchRating: Double = CosmosDefaultSettings.minTouchRating
-  
-  /// Set to `false` if you don't want to pass touches to superview (can be useful in a table view).
-  public var passTouchesToSuperview = CosmosDefaultSettings.passTouchesToSuperview
   
   /// When `true` the star fill level is updated when user touches the cosmos view. When `false` the Cosmos view only shows the rating and does not act as the input control.
   public var updateOnTouch = CosmosDefaultSettings.updateOnTouch
