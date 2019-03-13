@@ -8,8 +8,12 @@ Defaults setting values.
 struct CosmosDefaultSettings {
   init() {}
   
-  static let defaultColor = UIColor(red: 1, green: 149/255, blue: 0, alpha: 1)
-  
+  static let defaultColor = UIColor(red: 1.0, green: 149/255.0, blue: 0.0, alpha: 1.0)
+  static let firstStarColor = UIColor(red: 1.0, green: 95/255, blue: 90/255.0, alpha: 1.0)
+  static let secondStarColor = UIColor(red: 240/255.0, green: 75/255.0, blue: 97/255.0, alpha: 1.0)
+  static let thirdStarColor = UIColor(red: 229/255.0, green: 57/255.0, blue: 108/255.0, alpha: 1.0)
+  static let fourthStarColor = UIColor(red: 217/255.0, green: 37/255.0, blue: 118/255.0, alpha: 1.0)
+  static let fifthStarColor = UIColor(red: 204/255.0, green: 20/255.0, blue: 128/255.0, alpha: 1.0)
   
   // MARK: - Star settings
   // -----------------------------
@@ -62,6 +66,22 @@ struct CosmosDefaultSettings {
     CGPoint(x: 0.0,   y: 35.0),
     CGPoint(x: 38.5,  y: 35.0)
   ]
+    
+    /**
+     Sodexo array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
+     */
+    static let sdStarPoints: [CGPoint] = [
+        CGPoint(x: 50.0,  y: 0.0),
+        CGPoint(x: 65.0,  y: 33.0),
+        CGPoint(x: 100.0, y: 38.0),
+        CGPoint(x: 75.0,  y: 64.0),
+        CGPoint(x: 81.0,  y: 100.0),
+        CGPoint(x: 50.0,  y: 83.0),
+        CGPoint(x: 19.0,  y: 100.0),
+        CGPoint(x: 25.0,  y: 64.0),
+        CGPoint(x: 0.0,   y: 38.0),
+        CGPoint(x: 35.0,  y: 33.0)
+    ]
   
   /// Size of a single star.
   static var starSize: Double = 20

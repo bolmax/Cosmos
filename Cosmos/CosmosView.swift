@@ -433,45 +433,35 @@ Shows: ★★★★☆ (123)
     }
   }
     
-    // Custom filled images for each star
+    // Custom filled colors for each star
     
-    @IBInspectable var filledImage1: UIImage? {
+    @IBInspectable var firstFilledColor: UIColor = CosmosDefaultSettings.firstStarColor {
         didSet {
-            if let image = filledImage1 {
-                settings.appendFilled(img: image, for: CosmosFilledImageKeys.firstStarImageKey)
-            }
+            settings.firstStarFilledColor = firstFilledColor
         }
     }
     
-    @IBInspectable var filledImage2: UIImage? {
+    @IBInspectable var secondFilledColor: UIColor = CosmosDefaultSettings.filledColor {
         didSet {
-            if let image = filledImage2 {
-                settings.appendFilled(img: image, for: CosmosFilledImageKeys.secondStarImageKey)
-            }
+            settings.secondStarFilledColor = secondFilledColor
         }
     }
     
-    @IBInspectable var filledImage3: UIImage? {
+    @IBInspectable var thirdFilledColor: UIColor = CosmosDefaultSettings.filledColor {
         didSet {
-            if let image = filledImage3 {
-                settings.appendFilled(img: image, for: CosmosFilledImageKeys.thirdStarImageKey)
-            }
+            settings.thirdStarFilledColor = thirdFilledColor
         }
     }
     
-    @IBInspectable var filledImage4: UIImage? {
+    @IBInspectable var fourthFilledColor: UIColor = CosmosDefaultSettings.filledColor {
         didSet {
-            if let image = filledImage4 {
-                settings.appendFilled(img: image, for: CosmosFilledImageKeys.fourthStarImageKey)
-            }
+            settings.fourthStarFilledColor = fourthFilledColor
         }
     }
     
-    @IBInspectable var filledImage5: UIImage? {
+    @IBInspectable var fifthFilledColor: UIColor = CosmosDefaultSettings.filledColor {
         didSet {
-            if let image = filledImage5 {
-                settings.appendFilled(img: image, for: CosmosFilledImageKeys.fifthStarImageKey)
-            }
+            settings.fifthStarFilledColor = fifthFilledColor
         }
     }
   

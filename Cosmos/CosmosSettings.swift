@@ -44,8 +44,35 @@ public struct CosmosSettings {
   /// Background color of an empty star.
   public var emptyColor = CosmosDefaultSettings.emptyColor
   
-  /// Background color of a filled star.
+  /// Default Background color of a filled star.
   public var filledColor = CosmosDefaultSettings.filledColor
+    
+    /// First star background color of a filled star.
+    public var firstStarFilledColor = CosmosDefaultSettings.firstStarColor
+    
+    /// Second star background color of a filled star.
+    public var secondStarFilledColor = CosmosDefaultSettings.secondStarColor
+    
+    /// Third star background color of a filled star.
+    public var thirdStarFilledColor = CosmosDefaultSettings.thirdStarColor
+    
+    /// Fourth star background color of a filled star.
+    public var fourthStarFilledColor = CosmosDefaultSettings.fourthStarColor
+    
+    /// Fifth star background color of a filled star.
+    public var fifthStarFilledColor = CosmosDefaultSettings.fifthStarColor
+    
+    func filledColor(for index: Int) -> UIColor {
+        
+        switch index {
+            case 0: return firstStarFilledColor
+            case 1: return secondStarFilledColor
+            case 2: return thirdStarFilledColor
+            case 3: return fourthStarFilledColor
+            case 4: return fifthStarFilledColor
+            default: return filledColor
+        }
+    }
   
   /**
   
@@ -62,7 +89,7 @@ public struct CosmosSettings {
   Array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
   
   */
-  public var starPoints: [CGPoint] = CosmosDefaultSettings.starPoints
+  public var starPoints: [CGPoint] = CosmosDefaultSettings.sdStarPoints
   
   /// Size of a single star.
   public var starSize: Double = CosmosDefaultSettings.starSize
@@ -86,40 +113,6 @@ public struct CosmosSettings {
    
    */
   public var emptyImage: UIImage? = nil
-    
-    /**
-    
-    Dictionary with asset of filled images for start, each image for each star
-    */
-    public var filledImagesAsset = [String: UIImage]()
-    
-    /**
-     
-     Adding filled image to asset
-     */
-    mutating func appendFilled(img: UIImage, for key: String) {
-        filledImagesAsset[key] = img
-    }
-    
-    /**
-     
-     Getting filled image from asset by key
-     */
-    func filledImage(for key: String) -> UIImage? {
-        return filledImagesAsset[key] as? UIImage
-    }
-    
-    func getFilledImage(for index: Int) -> UIImage? {
-        
-        switch index {
-        case 0: return filledImage(for: CosmosFilledImageKeys.firstStarImageKey)
-        case 1: return filledImage(for: CosmosFilledImageKeys.secondStarImageKey)
-        case 2: return filledImage(for: CosmosFilledImageKeys.thirdStarImageKey)
-        case 3: return filledImage(for: CosmosFilledImageKeys.fourthStarImageKey)
-        case 4: return filledImage(for: CosmosFilledImageKeys.fifthStarImageKey)
-        default: return nil
-        }
-    }
   
   // MARK: - Text settings
   // -----------------------------
