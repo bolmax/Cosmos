@@ -9,11 +9,11 @@ struct CosmosDefaultSettings {
   init() {}
   
   static let defaultColor = UIColor(red: 1.0, green: 149/255.0, blue: 0.0, alpha: 1.0)
-  static let firstStarColor = UIColor(red: 1.0, green: 95/255, blue: 90/255.0, alpha: 1.0)
-  static let secondStarColor = UIColor(red: 240/255.0, green: 75/255.0, blue: 97/255.0, alpha: 1.0)
+  static let firstStarColor = UIColor(red: 204/255.0, green: 20/255.0, blue: 128/255.0, alpha: 1.0)
+  static let secondStarColor = UIColor(red: 217/255.0, green: 37/255.0, blue: 118/255.0, alpha: 1.0)
   static let thirdStarColor = UIColor(red: 229/255.0, green: 57/255.0, blue: 108/255.0, alpha: 1.0)
-  static let fourthStarColor = UIColor(red: 217/255.0, green: 37/255.0, blue: 118/255.0, alpha: 1.0)
-  static let fifthStarColor = UIColor(red: 204/255.0, green: 20/255.0, blue: 128/255.0, alpha: 1.0)
+  static let fourthStarColor = UIColor(red: 240/255.0, green: 75/255.0, blue: 97/255.0, alpha: 1.0)
+  static let fifthStarColor = UIColor(red: 1.0, green: 95/255, blue: 90/255.0, alpha: 1.0)
   
   // MARK: - Star settings
   // -----------------------------

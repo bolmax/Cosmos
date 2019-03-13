@@ -1,18 +1,6 @@
 import UIKit
 
 /**
- Filled image keys
- */
-
-struct CosmosFilledImageKeys {
-    static let firstStarImageKey = "firstStarImageKey"
-    static let secondStarImageKey = "secondStarImageKey"
-    static let thirdStarImageKey = "thirdStarImageKey"
-    static let fourthStarImageKey = "fourthStarImageKey"
-    static let fifthStarImageKey = "fifthStarImageKey"
-}
-
-/**
 
 Settings that define the appearance of the star rating views.
 
