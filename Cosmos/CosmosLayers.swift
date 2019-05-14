@@ -27,8 +27,8 @@ class CosmosLayers {
       
       let fillLevel = CosmosRating.starFillLevel(ratingRemainder: ratingRemander,
         fillMode: settings.fillMode)
-      
-        let starLayer = createCompositeStarLayer(fillLevel, settings: settings, isRightToLeft: isRightToLeft, index: index)
+      let starLayer = createCompositeStarLayer(fillLevel, settings: settings, isRightToLeft: isRightToLeft, index: index)
+        
       starLayers.append(starLayer)
       ratingRemander -= 1
     }
@@ -112,12 +112,21 @@ class CosmosLayers {
     
     let fillColor = isFilled ? settings.filledColor(for: index) : settings.emptyColor
     let strokeColor = isFilled ? settings.filledBorderColor : settings.emptyBorderColor
-
+    let lineWidth = isFilled ? settings.filledBorderWidth : settings.emptyBorderWidth
+    
+    if settings.showRatingText {
+        
+        let text = String(index + 1)
+        let textColor = isFilled ? settings.ratingTextFilledColor : settings.ratingTextColor
+        
+        return StarLayer.createWithRaitngText(settings.starPoints, size: settings.starSize, lineWidth: lineWidth, fillColor: fillColor, strokeColor: strokeColor, text: text, textColor: textColor, font: settings.ratingFont, fontSize: settings.ratingFontSize)
+    }
+    
     return StarLayer.create(settings.starPoints,
-      size: settings.starSize,
-      lineWidth: isFilled ? settings.filledBorderWidth : settings.emptyBorderWidth,
-      fillColor: fillColor,
-      strokeColor: strokeColor)
+                            size: settings.starSize,
+                            lineWidth: lineWidth,
+                            fillColor: fillColor,
+                            strokeColor: strokeColor)
   }
 
   /**

@@ -71,11 +71,52 @@ struct StarLayer {
       
     let shapeLayer = createShapeLayer(path.cgPath, lineWidth: lineWidth,
       fillColor: fillColor, strokeColor: strokeColor, size: size)
-      
+    
     containerLayer.addSublayer(shapeLayer)
     
     return containerLayer
   }
+    /**
+     Creates the star layer with rating text which is showing in the center of the star
+     */
+    static func createWithRaitngText(_ starPoints: [CGPoint], size: Double,
+                                     lineWidth: Double, fillColor: UIColor, strokeColor: UIColor, text: String, textColor: UIColor, font: UIFont, fontSize: CGFloat) -> CALayer {
+        
+        let containerLayer = create(starPoints, size: size, lineWidth: lineWidth, fillColor: fillColor, strokeColor: strokeColor)
+        let textLayer = createRatingText(text: text, fontSize: fontSize, font: font, size: size, textColor: textColor)
+        
+        if let shapeLayer = containerLayer.sublayers?.first {
+            shapeLayer.insertSublayer(textLayer, at: 0)
+        }
+        
+        return containerLayer
+    }
+    /**
+     Creates the star rating text which is showing in the center of the star
+     
+     - parameter text: rating text to be shown.
+     - parameter size: The width and height of the layer.
+     - parameter fontSize: The size of the font.
+     - parameter font: The font that will be applied to the text.
+     - parameter textColor: The color of the text.
+     */
+    static func createRatingText(text: String, fontSize: CGFloat, font: UIFont, size: Double, textColor: UIColor) -> CALayer {
+        
+        let textLayer = CATextLayer()
+        textLayer.anchorPoint = CGPoint()
+        textLayer.contentsScale = UIScreen.main.scale
+        textLayer.font = font
+        textLayer.fontSize = fontSize
+        textLayer.string = text
+        textLayer.alignmentMode = .center
+        textLayer.foregroundColor = textColor.cgColor
+        textLayer.bounds.size = CGSize(width: size, height: size)
+        textLayer.position.y = CGFloat(size / 2) - fontSize / 2
+        textLayer.isWrapped = true
+        textLayer.truncationMode = CATextLayerTruncationMode.end
+        
+        return textLayer
+    }
 
   /**
 
@@ -356,8 +397,12 @@ Defaults setting values.
 struct CosmosDefaultSettings {
   init() {}
   
-  static let defaultColor = UIColor(red: 1, green: 149/255, blue: 0, alpha: 1)
-  
+  static let defaultColor = UIColor(red: 1.0, green: 149/255.0, blue: 0.0, alpha: 1.0)
+  static let firstStarColor = UIColor(red: 204/255.0, green: 20/255.0, blue: 128/255.0, alpha: 1.0)
+  static let secondStarColor = UIColor(red: 217/255.0, green: 37/255.0, blue: 118/255.0, alpha: 1.0)
+  static let thirdStarColor = UIColor(red: 229/255.0, green: 57/255.0, blue: 108/255.0, alpha: 1.0)
+  static let fourthStarColor = UIColor(red: 240/255.0, green: 75/255.0, blue: 97/255.0, alpha: 1.0)
+  static let fifthStarColor = UIColor(red: 1.0, green: 95/255, blue: 90/255.0, alpha: 1.0)
   
   // MARK: - Star settings
   // -----------------------------
@@ -379,6 +424,28 @@ struct CosmosDefaultSettings {
   
   /// Background color of a filled star.
   static let filledColor = defaultColor
+    
+  // MARK: - Rating text color
+  // -----------------------------
+    
+  /// Rating text color.
+  static let ratingTextColor = UIColor.gray
+    
+  /// Rating text color.
+  static let ratingTextFilledColor = UIColor.white
+    
+  /// Rating text color.
+  static let showRatingText = false
+    
+  /// Rating text font.
+  static let ratingFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
+    
+  /// Rating text font size.
+  static var ratingFontSize: CGFloat {
+     get {
+        return textFont.pointSize
+     }
+  }
   
   /**
 
@@ -410,6 +477,22 @@ struct CosmosDefaultSettings {
     CGPoint(x: 0.0,   y: 35.0),
     CGPoint(x: 38.5,  y: 35.0)
   ]
+    
+    /**
+     Sodexo array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
+     */
+    static let sdStarPoints: [CGPoint] = [
+        CGPoint(x: 50.0,  y: 0.0),
+        CGPoint(x: 65.0,  y: 33.0),
+        CGPoint(x: 100.0, y: 38.0),
+        CGPoint(x: 75.0,  y: 64.0),
+        CGPoint(x: 81.0,  y: 100.0),
+        CGPoint(x: 50.0,  y: 83.0),
+        CGPoint(x: 19.0,  y: 100.0),
+        CGPoint(x: 25.0,  y: 64.0),
+        CGPoint(x: 0.0,   y: 38.0),
+        CGPoint(x: 35.0,  y: 33.0)
+    ]
   
   /// Size of a single star.
   static var starSize: Double = 20
@@ -521,12 +604,12 @@ class CosmosLayers {
 
     var starLayers = [CALayer]()
 
-    for _ in (0..<settings.totalStars) {
+    for index in (0..<settings.totalStars) {
       
       let fillLevel = CosmosRating.starFillLevel(ratingRemainder: ratingRemander,
         fillMode: settings.fillMode)
-      
-      let starLayer = createCompositeStarLayer(fillLevel, settings: settings, isRightToLeft: isRightToLeft)
+      let starLayer = createCompositeStarLayer(fillLevel, settings: settings, isRightToLeft: isRightToLeft, index: index)
+        
       starLayers.append(starLayer)
       ratingRemander -= 1
     }
@@ -544,21 +627,22 @@ class CosmosLayers {
   
   - parameter starFillLevel: Decimal number between 0 and 1 describing the star fill level.
   - parameter settings: Star view settings.
+  - parameter index: Star index.
   - returns: Layer that shows the star. The layer is displayed in the cosmos view.
   
   */
   class func createCompositeStarLayer(_ starFillLevel: Double,
-                                      settings: CosmosSettings, isRightToLeft: Bool) -> CALayer {
+                                      settings: CosmosSettings, isRightToLeft: Bool, index: Int) -> CALayer {
 
     if starFillLevel >= 1 {
-      return createStarLayer(true, settings: settings)
+        return createStarLayer(true, settings: settings, index: index)
     }
 
     if starFillLevel == 0 {
-      return createStarLayer(false, settings: settings)
+        return createStarLayer(false, settings: settings, index: index)
     }
 
-    return createPartialStar(starFillLevel, settings: settings, isRightToLeft: isRightToLeft)
+    return createPartialStar(starFillLevel, settings: settings, isRightToLeft: isRightToLeft, index: index)
   }
 
   /**
@@ -574,9 +658,9 @@ class CosmosLayers {
   - returns: Layer that contains the partially filled star.
   
   */
-  class func createPartialStar(_ starFillLevel: Double, settings: CosmosSettings, isRightToLeft: Bool) -> CALayer {
-    let filledStar = createStarLayer(true, settings: settings)
-    let emptyStar = createStarLayer(false, settings: settings)
+  class func createPartialStar(_ starFillLevel: Double, settings: CosmosSettings, isRightToLeft: Bool, index: Int) -> CALayer {
+    let filledStar = createStarLayer(true, settings: settings, index: index)
+    let emptyStar = createStarLayer(false, settings: settings, index: index)
 
 
     let parentLayer = CALayer()
@@ -598,7 +682,8 @@ class CosmosLayers {
     return parentLayer
   }
 
-  private class func createStarLayer(_ isFilled: Bool, settings: CosmosSettings) -> CALayer {
+  private class func createStarLayer(_ isFilled: Bool, settings: CosmosSettings, index: Int) -> CALayer {
+        
     if let image = isFilled ? settings.filledImage : settings.emptyImage {
       // Create a layer that shows a star from an image
       return StarLayer.create(image: image, size: settings.starSize)
@@ -606,14 +691,23 @@ class CosmosLayers {
     
     // Create a layer that draws a star from an array of points
     
-    let fillColor = isFilled ? settings.filledColor : settings.emptyColor
+    let fillColor = isFilled ? settings.filledColor(for: index) : settings.emptyColor
     let strokeColor = isFilled ? settings.filledBorderColor : settings.emptyBorderColor
-
+    let lineWidth = isFilled ? settings.filledBorderWidth : settings.emptyBorderWidth
+    
+    if settings.showRatingText {
+        
+        let text = String(index + 1)
+        let textColor = isFilled ? settings.ratingTextFilledColor : settings.ratingTextColor
+        
+        return StarLayer.createWithRaitngText(settings.starPoints, size: settings.starSize, lineWidth: lineWidth, fillColor: fillColor, strokeColor: strokeColor, text: text, textColor: textColor, font: settings.ratingFont, fontSize: settings.ratingFontSize)
+    }
+    
     return StarLayer.create(settings.starPoints,
-      size: settings.starSize,
-      lineWidth: isFilled ? settings.filledBorderWidth : settings.emptyBorderWidth,
-      fillColor: fillColor,
-      strokeColor: strokeColor)
+                            size: settings.starSize,
+                            lineWidth: lineWidth,
+                            fillColor: fillColor,
+                            strokeColor: strokeColor)
   }
 
   /**
@@ -1026,8 +1120,35 @@ public struct CosmosSettings {
   /// Background color of an empty star.
   public var emptyColor = CosmosDefaultSettings.emptyColor
   
-  /// Background color of a filled star.
+  /// Default Background color of a filled star.
   public var filledColor = CosmosDefaultSettings.filledColor
+    
+    /// First star background color of a filled star.
+    public var firstStarFilledColor = CosmosDefaultSettings.firstStarColor
+    
+    /// Second star background color of a filled star.
+    public var secondStarFilledColor = CosmosDefaultSettings.secondStarColor
+    
+    /// Third star background color of a filled star.
+    public var thirdStarFilledColor = CosmosDefaultSettings.thirdStarColor
+    
+    /// Fourth star background color of a filled star.
+    public var fourthStarFilledColor = CosmosDefaultSettings.fourthStarColor
+    
+    /// Fifth star background color of a filled star.
+    public var fifthStarFilledColor = CosmosDefaultSettings.fifthStarColor
+    
+    func filledColor(for index: Int) -> UIColor {
+        
+        switch index {
+            case 0: return firstStarFilledColor
+            case 1: return secondStarFilledColor
+            case 2: return thirdStarFilledColor
+            case 3: return fourthStarFilledColor
+            case 4: return fifthStarFilledColor
+            default: return filledColor
+        }
+    }
   
   /**
   
@@ -1044,7 +1165,7 @@ public struct CosmosSettings {
   Array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
   
   */
-  public var starPoints: [CGPoint] = CosmosDefaultSettings.starPoints
+  public var starPoints: [CGPoint] = CosmosDefaultSettings.sdStarPoints
   
   /// Size of a single star.
   public var starSize: Double = CosmosDefaultSettings.starSize
@@ -1081,15 +1202,29 @@ public struct CosmosSettings {
   /// Distance between the text and the stars.
   public var textMargin: Double = CosmosDefaultSettings.textMargin
   
-  
+  // MARK: - Rating text settings
+  // -----------------------------
+    
+  /// Rating text color.
+  public var ratingTextColor: UIColor = CosmosDefaultSettings.ratingTextColor
+    
+  /// Rating text filled color.
+  public var ratingTextFilledColor: UIColor = CosmosDefaultSettings.ratingTextFilledColor
+    
+  /// Enable rating text.
+  public var showRatingText: Bool = CosmosDefaultSettings.showRatingText
+    
+  /// Rating text font.
+  public var ratingFont: UIFont = CosmosDefaultSettings.ratingFont
+    
+  /// Rating font size.
+  public var ratingFontSize: CGFloat = CosmosDefaultSettings.ratingFontSize
+    
   // MARK: - Touch settings
   // -----------------------------
   
   /// The lowest rating that user can set by touching the stars.
   public var minTouchRating: Double = CosmosDefaultSettings.minTouchRating
-  
-  /// Set to `false` if you don't want to pass touches to superview (can be useful in a table view).
-  public var passTouchesToSuperview = CosmosDefaultSettings.passTouchesToSuperview
   
   /// When `true` the star fill level is updated when user touches the cosmos view. When `false` the Cosmos view only shows the rating and does not act as the input control.
   public var updateOnTouch = CosmosDefaultSettings.updateOnTouch
@@ -1414,14 +1549,14 @@ Shows: ★★★★☆ (123)
   
   /// Overriding the function to detect the first touch gesture.
   open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesBegan(touches, with: event) }
+    super.touchesBegan(touches, with: event)
     guard let location = touchLocationFromBeginningOfRating(touches) else { return }
     onDidTouch(location)
   }
   
   /// Overriding the function to detect touch move.
   open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesMoved(touches, with: event) }
+    super.touchesMoved(touches, with: event)
     guard let location = touchLocationFromBeginningOfRating(touches) else { return }
     onDidTouch(location)
   }
@@ -1439,7 +1574,8 @@ Shows: ★★★★☆ (123)
   
   /// Detecting event when the user lifts their finger.
   open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesEnded(touches, with: event) }
+    super.touchesEnded(touches, with: event)
+    
     didFinishTouchingCosmos?(rating)
   }
 
@@ -1450,7 +1586,8 @@ Shows: ★★★★☆ (123)
    
    */
   open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if settings.passTouchesToSuperview { super.touchesCancelled(touches, with: event) }
+    super.touchesCancelled(touches, with: event)
+    
     didFinishTouchingCosmos?(rating)
   }
 
@@ -1591,6 +1728,70 @@ Shows: ★★★★☆ (123)
       settings.emptyImage = emptyImage
     }
   }
+    
+    // Custom filled colors for each star
+    
+    @IBInspectable var firstFilledColor: UIColor = CosmosDefaultSettings.firstStarColor {
+        didSet {
+            settings.firstStarFilledColor = firstFilledColor
+        }
+    }
+    
+    @IBInspectable var secondFilledColor: UIColor = CosmosDefaultSettings.filledColor {
+        didSet {
+            settings.secondStarFilledColor = secondFilledColor
+        }
+    }
+    
+    @IBInspectable var thirdFilledColor: UIColor = CosmosDefaultSettings.filledColor {
+        didSet {
+            settings.thirdStarFilledColor = thirdFilledColor
+        }
+    }
+    
+    @IBInspectable var fourthFilledColor: UIColor = CosmosDefaultSettings.filledColor {
+        didSet {
+            settings.fourthStarFilledColor = fourthFilledColor
+        }
+    }
+    
+    @IBInspectable var fifthFilledColor: UIColor = CosmosDefaultSettings.filledColor {
+        didSet {
+            settings.fifthStarFilledColor = fifthFilledColor
+        }
+    }
+    
+    // Rating text settings
+    
+    @IBInspectable var ratingTextColor: UIColor = CosmosDefaultSettings.ratingTextColor {
+        didSet {
+            settings.ratingTextColor = ratingTextColor
+        }
+    }
+    
+    @IBInspectable var ratingTextFilledColor: UIColor = CosmosDefaultSettings.ratingTextFilledColor {
+        didSet {
+            settings.ratingTextFilledColor = ratingTextFilledColor
+        }
+    }
+    
+    @IBInspectable var enableRatingText: Bool = CosmosDefaultSettings.showRatingText {
+        didSet {
+            settings.showRatingText = enableRatingText
+        }
+    }
+    
+    @IBInspectable var ratingFont: UIFont = CosmosDefaultSettings.ratingFont {
+        didSet {
+            settings.ratingFont = ratingFont
+        }
+    }
+    
+    @IBInspectable var ratingFontSize: CGFloat = CosmosDefaultSettings.ratingFontSize {
+        didSet {
+            settings.ratingFontSize = ratingFontSize
+        }
+    }
   
   /// Draw the stars in interface buidler
   open override func prepareForInterfaceBuilder() {

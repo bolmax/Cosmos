@@ -114,7 +114,24 @@ public struct CosmosSettings {
   /// Distance between the text and the stars.
   public var textMargin: Double = CosmosDefaultSettings.textMargin
   
-  
+  // MARK: - Rating text settings
+  // -----------------------------
+    
+  /// Rating text color.
+  public var ratingTextColor: UIColor = CosmosDefaultSettings.ratingTextColor
+    
+  /// Rating text filled color.
+  public var ratingTextFilledColor: UIColor = CosmosDefaultSettings.ratingTextFilledColor
+    
+  /// Enable rating text.
+  public var showRatingText: Bool = CosmosDefaultSettings.showRatingText
+    
+  /// Rating text font.
+  public var ratingFont: UIFont = CosmosDefaultSettings.ratingFont
+    
+  /// Rating font size.
+  public var ratingFontSize: CGFloat = CosmosDefaultSettings.ratingFontSize
+    
   // MARK: - Touch settings
   // -----------------------------
   

@@ -35,6 +35,28 @@ struct CosmosDefaultSettings {
   
   /// Background color of a filled star.
   static let filledColor = defaultColor
+    
+  // MARK: - Rating text color
+  // -----------------------------
+    
+  /// Rating text color.
+  static let ratingTextColor = UIColor.gray
+    
+  /// Rating text color.
+  static let ratingTextFilledColor = UIColor.white
+    
+  /// Rating text color.
+  static let showRatingText = false
+    
+  /// Rating text font.
+  static let ratingFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
+    
+  /// Rating text font size.
+  static var ratingFontSize: CGFloat {
+     get {
+        return textFont.pointSize
+     }
+  }
   
   /**
 

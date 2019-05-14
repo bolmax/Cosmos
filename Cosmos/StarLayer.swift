@@ -31,11 +31,52 @@ struct StarLayer {
       
     let shapeLayer = createShapeLayer(path.cgPath, lineWidth: lineWidth,
       fillColor: fillColor, strokeColor: strokeColor, size: size)
-      
+    
     containerLayer.addSublayer(shapeLayer)
     
     return containerLayer
   }
+    /**
+     Creates the star layer with rating text which is showing in the center of the star
+     */
+    static func createWithRaitngText(_ starPoints: [CGPoint], size: Double,
+                                     lineWidth: Double, fillColor: UIColor, strokeColor: UIColor, text: String, textColor: UIColor, font: UIFont, fontSize: CGFloat) -> CALayer {
+        
+        let containerLayer = create(starPoints, size: size, lineWidth: lineWidth, fillColor: fillColor, strokeColor: strokeColor)
+        let textLayer = createRatingText(text: text, fontSize: fontSize, font: font, size: size, textColor: textColor)
+        
+        if let shapeLayer = containerLayer.sublayers?.first {
+            shapeLayer.insertSublayer(textLayer, at: 0)
+        }
+        
+        return containerLayer
+    }
+    /**
+     Creates the star rating text which is showing in the center of the star
+     
+     - parameter text: rating text to be shown.
+     - parameter size: The width and height of the layer.
+     - parameter fontSize: The size of the font.
+     - parameter font: The font that will be applied to the text.
+     - parameter textColor: The color of the text.
+     */
+    static func createRatingText(text: String, fontSize: CGFloat, font: UIFont, size: Double, textColor: UIColor) -> CALayer {
+        
+        let textLayer = CATextLayer()
+        textLayer.anchorPoint = CGPoint()
+        textLayer.contentsScale = UIScreen.main.scale
+        textLayer.font = font
+        textLayer.fontSize = fontSize
+        textLayer.string = text
+        textLayer.alignmentMode = .center
+        textLayer.foregroundColor = textColor.cgColor
+        textLayer.bounds.size = CGSize(width: size, height: size)
+        textLayer.position.y = CGFloat(size / 2) - fontSize / 2
+        textLayer.isWrapped = true
+        textLayer.truncationMode = CATextLayerTruncationMode.end
+        
+        return textLayer
+    }
 
   /**
 

@@ -464,6 +464,38 @@ Shows: ★★★★☆ (123)
             settings.fifthStarFilledColor = fifthFilledColor
         }
     }
+    
+    // Rating text settings
+    
+    @IBInspectable var ratingTextColor: UIColor = CosmosDefaultSettings.ratingTextColor {
+        didSet {
+            settings.ratingTextColor = ratingTextColor
+        }
+    }
+    
+    @IBInspectable var ratingTextFilledColor: UIColor = CosmosDefaultSettings.ratingTextFilledColor {
+        didSet {
+            settings.ratingTextFilledColor = ratingTextFilledColor
+        }
+    }
+    
+    @IBInspectable var enableRatingText: Bool = CosmosDefaultSettings.showRatingText {
+        didSet {
+            settings.showRatingText = enableRatingText
+        }
+    }
+    
+    @IBInspectable var ratingFont: UIFont = CosmosDefaultSettings.ratingFont {
+        didSet {
+            settings.ratingFont = ratingFont
+        }
+    }
+    
+    @IBInspectable var ratingFontSize: CGFloat = CosmosDefaultSettings.ratingFontSize {
+        didSet {
+            settings.ratingFontSize = ratingFontSize
+        }
+    }
   
   /// Draw the stars in interface buidler
   open override func prepareForInterfaceBuilder() {
